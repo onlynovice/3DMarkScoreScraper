@@ -1,4 +1,4 @@
-# 3DMarkScoreScraper
+# 3DMark跑分爬取工具 3DMarkScoreScraper
 
 ## 要求 Requirements
 Python >= 3.9
