@@ -17,6 +17,7 @@ python Main.py
 - CPU数据来源：3DMark CPU Profile
 - GPU数据来源：3DMark Time Spy（图形跑分） & Port Royal（光追跑分）
 
+[3DMark Search](https://www.3dmark.com/search?#advanced?test=spy%20P&cpuId=&gpuId=1509&gpuCount=1&gpuType=ALL&deviceType=ALL&storageModel=ALL&showRamDisks=false&memoryChannels=0&country=&scoreType=graphicsScore&hofMode=true&showInvalidResults=false&freeParams=&minGpuCoreClock=&maxGpuCoreClock=&minGpuMemClock=&maxGpuMemClock=&minCpuClock=&maxCpuClock=)
 
 有两种模式
 1. 全量更新，从3dmark爬取数据，保存到本地（json格式），然后处理数据导出Excel
