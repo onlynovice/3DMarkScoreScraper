@@ -42,7 +42,7 @@ def Get3DMarkUrlParameters(
     gpuId = Id if "GPU" in TestScene.name else ""
     gpuCount = 1 if "GPU" in TestScene.name else 0
     scoreType = TestScene.value[1]
-    UrlParametersList: list[str] = [
+    UrlParametersList: List[str] = [
         f"test={test}",
         f"cpuId={cpuId}",
         f"gpuId={gpuId}",
