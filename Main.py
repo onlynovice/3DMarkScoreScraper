@@ -139,12 +139,14 @@ def ProcessData(Data: DATA_TYPE, IsCpu: bool) -> None:
     )
     COL_VENDOR = "Vendor"
     COL_MODEL = "Model"
-    SCORE_LIMIT = 0
+    SCORE_LIMIT = 1
     GUID_CLASS = CPUName if IsCpu else GPUName
 
     Df = pd.DataFrame(Data.values())
     # 剔除名字为空
     Df = Df[Df[COL_NAME] != ""]
+    # 尽可能剔除非游戏卡
+    Df = Df[~Df[COL_NAME].str.contains("Quadro|Pro|Ada|Embedded|Tesla", case=False)]
     # 数据转为int
     Df[COL_ID] = Df[COL_ID].astype(int)
     Df[COL_SCORE] = Df[COL_SCORE].astype(int)

@@ -196,6 +196,12 @@ class GPUName:
         TokenList = GPUName.RemoveInfo(
             TokenList, r"^FOR$|^\d+TH$|^GEN$|^PROCESSOR|^ANNIVERSARY$"
         )
+        
+        # 辨别移动端MX标识以及后缀M
+        Pattern_laptop = re.compile(r"^\d+M$|MX")
+        for Token in TokenList:
+            if Pattern_laptop.search(Token):
+                self.Features.add("LAPTOP")
 
         # 取得生产商, 并移除
         if len(TokenList) != 0:
