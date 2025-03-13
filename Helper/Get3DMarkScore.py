@@ -9,7 +9,10 @@ class TESTSCENE(Enum):
     CPU_SINGLECORE = ("crc P", "singleCoreScore", "Single Core Score")
     CPU_ALLCORES = ("crc P", "allCoresScore", "Multi Cores Score")
     GPU_GRAPHICS = ("spy P", "graphicsScore", "Graphics Score")
+    GPU_GRAPHICS_X = ("spy X", "graphicsScore", "Graphics Score")
     GPU_RAYTRACING = ("pr P", "graphicsScore", "RayTracing Score")
+    GPU_STEELNOMAD_DX = ("sw DX", "graphicsScore", "Steel Nomad DX12 Score")
+    GPU_STEELNOMAD_VK = ("sw B", "graphicsScore", "Steel Nomad Vulkan Score")
 
 
 def ErrorCallback(CallState: RetryCallState) -> None:
@@ -33,7 +36,10 @@ def Get3DMarkUrlParameters(
         TESTSCENE.CPU_SINGLECORE,
         TESTSCENE.CPU_ALLCORES,
         TESTSCENE.GPU_GRAPHICS,
+        TESTSCENE.GPU_GRAPHICS_X,
         TESTSCENE.GPU_RAYTRACING,
+        TESTSCENE.GPU_STEELNOMAD_DX,
+        TESTSCENE.GPU_STEELNOMAD_VK,
     ],
     Id: int,
 ) -> str:
@@ -42,6 +48,8 @@ def Get3DMarkUrlParameters(
     gpuId = Id if "GPU" in TestScene.name else ""
     gpuCount = 1 if "GPU" in TestScene.name else 0
     scoreType = TestScene.value[1]
+    startDate = ""
+    endDate = ""
     UrlParametersList: List[str] = [
         f"test={test}",
         f"cpuId={cpuId}",
@@ -56,6 +64,8 @@ def Get3DMarkUrlParameters(
         "hofMode=false",
         "showInvalidResults=false",
         "freeParams=",
+        f"startDate={startDate}",
+        f"endDate={endDate}",
         "minGpuCoreClock=",
         "maxGpuCoreClock=",
         "minGpuMemClock=",

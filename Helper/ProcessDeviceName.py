@@ -186,6 +186,7 @@ class GPUName:
         IsMAXQ: bool = bool(BeforeLen - len(TokenList))
         if IsMAXQ:
             self.Features.add("MAX-Q")
+            self.Features.add("LAPTOP")
 
         # 去掉功耗
         TokenList = GPUName.RemoveInfo(TokenList, r"^\d+(\.\d+)?W$")

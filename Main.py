@@ -21,7 +21,7 @@ DATA_TYPE = Dict[int, Dict[str, Union[int, str]]]
 def GetAllDeviceInfo(IsCpu: bool, *Args: int) -> DATA_TYPE:
     IdToDeviceInfo: DATA_TYPE
     DEVICE: str = "CPU" if IsCpu else "GPU"
-    MinId: int = 1
+    MinId: int = 1 if IsCpu else 1000
     MaxId: int = 4000 if IsCpu else 2000
     if len(Args) > 0:
         MinId = Args[0]
@@ -58,7 +58,10 @@ def GetAllDeviceInfo(IsCpu: bool, *Args: int) -> DATA_TYPE:
                             Item[TESTSCENE.CPU_ALLCORES.value[2]] = -1
                         else:
                             Item[TESTSCENE.GPU_GRAPHICS.value[2]] = -1
+                            Item[TESTSCENE.GPU_GRAPHICS_X.value[2]] = -1
                             Item[TESTSCENE.GPU_RAYTRACING.value[2]] = -1
+                            Item[TESTSCENE.GPU_STEELNOMAD_DX.value[2]] = -1
+                            Item[TESTSCENE.GPU_STEELNOMAD_VK.value[2]] = -1
                         IdToDeviceInfo[Result[0]] = Item
 
                         ProgressBar.set_description_str(
@@ -72,7 +75,10 @@ def GetAllDeviceInfo(IsCpu: bool, *Args: int) -> DATA_TYPE:
                 TESTSCENE.CPU_SINGLECORE,
                 TESTSCENE.CPU_ALLCORES,
                 TESTSCENE.GPU_GRAPHICS,
+                TESTSCENE.GPU_GRAPHICS_X,
                 TESTSCENE.GPU_RAYTRACING,
+                TESTSCENE.GPU_STEELNOMAD_DX,
+                TESTSCENE.GPU_STEELNOMAD_VK,
             ]
         ) -> None:
             Threads.clear()
@@ -105,7 +111,12 @@ def GetAllDeviceInfo(IsCpu: bool, *Args: int) -> DATA_TYPE:
         TestSceneList = (
             [TESTSCENE.CPU_SINGLECORE, TESTSCENE.CPU_ALLCORES]
             if IsCpu
-            else [TESTSCENE.GPU_GRAPHICS, TESTSCENE.GPU_RAYTRACING]
+            else [TESTSCENE.GPU_GRAPHICS,
+                  TESTSCENE.GPU_GRAPHICS_X,
+                  TESTSCENE.GPU_RAYTRACING,
+                  TESTSCENE.GPU_STEELNOMAD_DX,
+                  TESTSCENE.GPU_STEELNOMAD_VK
+                  ]
         )
         for TestScene in TestSceneList:
             print("------------------------------------------")
@@ -173,14 +184,15 @@ def Main() -> None:
     IsCpu: bool
     Data: DATA_TYPE
     if Mode == MODES_TO_CHOOSE[0]:
-        Device = questionary.select(
-            message="要爬哪个数据？\n"
-            + "Which score to scrape?\n"
-            + "1) CPU, 3DMark CPU Profile Single Core & All Cores\n"
-            + "2) GPU, 3DMark Time Spy & Port Royal\n",
-            choices=["1) CPU", "2) GPU"],
-            show_selected=True,
-        ).ask()
+        # Device = questionary.select(
+        #     message="要爬哪个数据？\n"
+        #     + "Which score to scrape?\n"
+        #     + "1) CPU, 3DMark CPU Profile Single Core & All Cores\n"
+        #     + "2) GPU, 3DMark Time Spy & Port Royal\n",
+        #     choices=["1) CPU", "2) GPU"],
+        #     show_selected=True,
+        # ).ask()
+        Device = "GPU"
         IsCpu = "CPU" in Device
 
         StartTime = time.time()
