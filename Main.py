@@ -154,6 +154,10 @@ def ProcessData(Data: DATA_TYPE, IsCpu: bool) -> None:
     Df = Df[Df[COL_SCORE] >= SCORE_LIMIT]
     # 根据Name生成GUID
     Df[COL_NAME_GUID] = Df[COL_NAME].apply(GUID_CLASS)
+    # 剔除专业卡
+    Df = Df[Df[COL_NAME_GUID].apply(lambda obj: "PROFESSIONAL" not in obj.Features)]
+    # 剔除锁算力卡
+    Df = Df[Df[COL_NAME_GUID].apply(lambda obj: "LHR" not in obj.Features)]
     # 新增 Vendor，Model 列
     VendorSeries = Df[COL_NAME_GUID].apply(lambda Obj: Obj.Vendor)
     Df.insert(Df.columns.get_loc(COL_NAME), COL_VENDOR, VendorSeries)

@@ -8,8 +8,8 @@ from tenacity import retry, stop_after_attempt, RetryCallState
 class TESTSCENE(Enum):
     CPU_SINGLECORE = ("crc P", "singleCoreScore", "Single Core Score")
     CPU_ALLCORES = ("crc P", "allCoresScore", "Multi Cores Score")
-    GPU_GRAPHICS = ("spy P", "graphicsScore", "Graphics Score")
-    GPU_GRAPHICS_X = ("spy X", "graphicsScore", "Graphics Score")
+    GPU_GRAPHICS = ("spy P", "graphicsScore", "Timespy Score")
+    GPU_GRAPHICS_X = ("spy X", "graphicsScore", "Timespy Extreme Score")
     GPU_RAYTRACING = ("pr P", "graphicsScore", "RayTracing Score")
     GPU_STEELNOMAD_DX = ("sw DX", "graphicsScore", "Steel Nomad DX12 Score")
     GPU_STEELNOMAD_VK = ("sw B", "graphicsScore", "Steel Nomad Vulkan Score")
