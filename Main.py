@@ -203,7 +203,6 @@ def Main() -> None:
             choices=["1) CPU", "2) GPU"],
             show_selected=True,
         ).ask()
-        Device = "GPU"
         IsCpu = "CPU" in Device
 
         try:
