@@ -3,6 +3,7 @@ from requests import Response
 from typing import Dict, Tuple, List, Literal, Union
 from enum import Enum
 from tenacity import retry, stop_after_attempt, RetryCallState
+from datetime import date, timedelta
 
 
 class TESTSCENE(Enum):
@@ -42,14 +43,19 @@ def Get3DMarkUrlParameters(
         TESTSCENE.GPU_STEELNOMAD_VK,
     ],
     Id: int,
+    time_range: int,
 ) -> str:
     test = TestScene.value[0]
     cpuId = Id if "CPU" in TestScene.name else ""
     gpuId = Id if "GPU" in TestScene.name else ""
     gpuCount = 1 if "GPU" in TestScene.name else 0
     scoreType = TestScene.value[1]
-    startDate = ""
-    endDate = ""
+    if time_range > 0:
+        startDate = f"{date.today()-timedelta(days=time_range)}"
+        endDate = f"{date.today()}"
+    else:
+        startDate = ""
+        endDate = ""
     UrlParametersList: List[str] = [
         f"test={test}",
         f"cpuId={cpuId}",
@@ -84,8 +90,9 @@ def GetMedianScoreFromId(
         TESTSCENE.GPU_RAYTRACING,
     ],
     Id: int,
+    time_range: int,
 ) -> Tuple[int, int]:
-    UrlParameters: str = Get3DMarkUrlParameters(TestScene, Id)
+    UrlParameters: str = Get3DMarkUrlParameters(TestScene, Id, time_range)
     Url: str = f"https://www.3dmark.com/proxycon/ajax/medianscore?{UrlParameters}"
     Response = Get(Url)
     try:

@@ -18,7 +18,7 @@ from Helper.Get3DMarkScore import GetNameFromId, GetMedianScoreFromId, TESTSCENE
 DATA_TYPE = Dict[int, Dict[str, Union[int, str]]]
 
 
-def GetAllDeviceInfo(IsCpu: bool, *Args: int) -> DATA_TYPE:
+def GetAllDeviceInfo(IsCpu: bool, time_range: int, *Args: int) -> DATA_TYPE:
     IdToDeviceInfo: DATA_TYPE
     DEVICE: str = "CPU" if IsCpu else "GPU"
     MinId: int = 1 if IsCpu else 1000
@@ -79,11 +79,12 @@ def GetAllDeviceInfo(IsCpu: bool, *Args: int) -> DATA_TYPE:
                 TESTSCENE.GPU_RAYTRACING,
                 TESTSCENE.GPU_STEELNOMAD_DX,
                 TESTSCENE.GPU_STEELNOMAD_VK,
-            ]
+            ],
+            time_range: int
         ) -> None:
             Threads.clear()
             Threads.extend(
-                ThreadPool.submit(GetMedianScoreFromId, TestScene, i)
+                ThreadPool.submit(GetMedianScoreFromId, TestScene, i, time_range)
                 for i in tqdm(
                     IdToDeviceInfo.keys(), desc="Tasks Submitting...", unit="tasks"
                 )
@@ -121,7 +122,7 @@ def GetAllDeviceInfo(IsCpu: bool, *Args: int) -> DATA_TYPE:
         for TestScene in TestSceneList:
             print("------------------------------------------")
             print(f"Get {TestScene.value[2]}")
-            GetScore(TestScene)
+            GetScore(TestScene, time_range)
 
     return IdToDeviceInfo
 
@@ -201,8 +202,16 @@ def Main() -> None:
         Device = "GPU"
         IsCpu = "CPU" in Device
 
+        try:
+            time_range = int(input(f"要爬取近一段时间的数据吗？输入天数，不输入则爬取全部数据："))
+            print(f"将爬取近{time_range}天的数据。")
+            if time_range < 0:
+                time_range = 0
+        except ValueError:
+            time_range = 0
+        
         StartTime = time.time()
-        Data = GetAllDeviceInfo(IsCpu)
+        Data = GetAllDeviceInfo(IsCpu, time_range)
         print(f"\nTotal time:{time.time() - StartTime:.2f}s")
 
         SavePath = ChoseAFileToSave(
