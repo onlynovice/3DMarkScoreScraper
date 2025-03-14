@@ -211,7 +211,7 @@ class GPUName:
             self.Features.add("LAPTOP")
         
         # 辨别移动端MX标识以及后缀M
-        Pattern_laptop = re.compile(r"^\d+M$|MX|^\d+S$")
+        Pattern_laptop = re.compile(r"\d+M$|MX|^\d+S$|^\d+T")
         for Token in TokenList:
             if Pattern_laptop.search(Token):
                 self.Features.add("LAPTOP")
