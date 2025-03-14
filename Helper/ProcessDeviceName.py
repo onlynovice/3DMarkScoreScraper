@@ -158,6 +158,28 @@ class GPUName:
         self.Vendor: str = "Unknown"
         self.Model: str = "Unknown"
         self.Features: Set[str] = set()
+        self.DisplayName: str = Name
+
+        # 直接将一部分标识去除，作为显示用的名称
+        if "(notebook)" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("(notebook)", "")
+        if "(Notebook)" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("(Notebook)", "")
+        if "(Laptop)" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("(Laptop)", "")
+        if "AMD" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("AMD", "")
+        if "Radeon" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("Radeon", "")
+        if "NVIDIA" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("NVIDIA", "")
+        if "GeForce" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("GeForce", "")
+        if "Intel" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("Intel", "")
+        if "Arc" in self.DisplayName:
+            self.DisplayName = self.DisplayName.replace("Arc", "")
+        self.DisplayName = self.DisplayName.strip()
 
         # 规范化，将一些不规则内容去除
         # 全部大写

@@ -140,6 +140,7 @@ def ProcessData(Data: DATA_TYPE, IsCpu: bool) -> None:
     )
     COL_VENDOR = "Vendor"
     COL_MODEL = "Model"
+    COL_DISPLAY_NAME = "Display Name"
     SCORE_LIMIT = 1
     GUID_CLASS = CPUName if IsCpu else GPUName
 
@@ -159,11 +160,14 @@ def ProcessData(Data: DATA_TYPE, IsCpu: bool) -> None:
     Df = Df[Df[COL_NAME_GUID].apply(lambda obj: "PROFESSIONAL" not in obj.Features)]
     # 剔除锁算力卡
     Df = Df[Df[COL_NAME_GUID].apply(lambda obj: "LHR" not in obj.Features)]
-    # 新增 Vendor，Model 列
+    # 新增 Vendor，Model，Display Name 列
     VendorSeries = Df[COL_NAME_GUID].apply(lambda Obj: Obj.Vendor)
     Df.insert(Df.columns.get_loc(COL_NAME), COL_VENDOR, VendorSeries)
     ModelSeries = Df[COL_NAME_GUID].apply(lambda Obj: Obj.Model)
     Df.insert(Df.columns.get_loc(COL_NAME), COL_MODEL, ModelSeries)
+    DisplayNameSeries = Df[COL_NAME_GUID].apply(lambda Obj: Obj.DisplayName)
+    Df.insert(Df.columns.get_loc(COL_NAME), COL_DISPLAY_NAME, DisplayNameSeries)
+
     # 根据 Score 排序
     Df.sort_values(COL_SCORE, ascending=False, inplace=True)
     Df.reset_index(drop=True, inplace=True)
