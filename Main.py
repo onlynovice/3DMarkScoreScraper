@@ -165,8 +165,9 @@ def ProcessData(Data: DATA_TYPE, IsCpu: bool) -> None:
     Df.insert(Df.columns.get_loc(COL_NAME), COL_VENDOR, VendorSeries)
     ModelSeries = Df[COL_NAME_GUID].apply(lambda Obj: Obj.Model)
     Df.insert(Df.columns.get_loc(COL_NAME), COL_MODEL, ModelSeries)
-    DisplayNameSeries = Df[COL_NAME_GUID].apply(lambda Obj: Obj.DisplayName)
-    Df.insert(Df.columns.get_loc(COL_NAME), COL_DISPLAY_NAME, DisplayNameSeries)
+    if not IsCpu:
+        DisplayNameSeries = Df[COL_NAME_GUID].apply(lambda Obj: Obj.DisplayName)
+        Df.insert(Df.columns.get_loc(COL_NAME), COL_DISPLAY_NAME, DisplayNameSeries)
 
     # 根据 Score 排序
     Df.sort_values(COL_SCORE, ascending=False, inplace=True)
@@ -207,9 +208,10 @@ def Main() -> None:
 
         try:
             time_range = int(input(f"要爬取近一段时间的数据吗？输入天数，不输入则爬取全部数据："))
-            print(f"将爬取近{time_range}天的数据。")
-            if time_range < 0:
+            if time_range <= 0:
                 time_range = 0
+            else:
+                print(f"将爬取近{time_range}天的数据。")
         except ValueError:
             time_range = 0
         
