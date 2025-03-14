@@ -195,14 +195,14 @@ def Main() -> None:
     IsCpu: bool
     Data: DATA_TYPE
     if Mode == MODES_TO_CHOOSE[0]:
-        # Device = questionary.select(
-        #     message="要爬哪个数据？\n"
-        #     + "Which score to scrape?\n"
-        #     + "1) CPU, 3DMark CPU Profile Single Core & All Cores\n"
-        #     + "2) GPU, 3DMark Time Spy & Port Royal\n",
-        #     choices=["1) CPU", "2) GPU"],
-        #     show_selected=True,
-        # ).ask()
+        Device = questionary.select(
+            message="要爬哪个数据？\n"
+            + "Which score to scrape?\n"
+            + "1) CPU, 3DMark CPU Profile Single Core & All Cores\n"
+            + "2) GPU, 3DMark Time Spy & Port Royal\n",
+            choices=["1) CPU", "2) GPU"],
+            show_selected=True,
+        ).ask()
         Device = "GPU"
         IsCpu = "CPU" in Device
 
