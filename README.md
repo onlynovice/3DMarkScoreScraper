@@ -1,12 +1,20 @@
 # 3DMark跑分爬取工具
 
-## 要求
-Python >= 3.9
-
-## 依赖
-openpyxl, tqdm, pandas, requests, tenacity, questionary
-
 ## 用法
+<details>
+  <summary>版本要求</summary>
+
+- Python: >= 3.9 (64-bit only)
+- 依赖
+  - openpyxl
+  - pandas
+  - questionary
+  - requests
+  - tenacity
+  - tqdm
+
+</details>
+
 ```python
 git clone https://github.com/onlynovice/3DMarkScoreScraper.git
 python Main.py
