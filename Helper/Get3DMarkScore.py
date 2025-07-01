@@ -5,11 +5,60 @@ from enum import Enum
 from tenacity import retry, stop_after_attempt, RetryCallState
 
 
-class TESTSCENE(Enum):
-    CPU_SINGLECORE = ("crc P", "singleCoreScore", "Single Core Score")
-    CPU_ALLCORES = ("crc P", "allCoresScore", "Multi Cores Score")
-    GPU_GRAPHICS = ("spy P", "graphicsScore", "Graphics Score")
-    GPU_RAYTRACING = ("pr P", "graphicsScore", "RayTracing Score")
+class CPU_TESTSCENE(Enum):
+    SingleCore = ("crc P", "singleCoreScore", "3DMark CPU Profile 1 thread")
+    TwoCores = ("crc P", "twoCoresScore", "3DMark CPU Profile 2 threads")
+    FourCores = ("crc P", "fourCoresScore", "3DMark CPU Profile 4 threads")
+    EightCores = ("crc P", "eightCoresScore", "3DMark CPU Profile 8 threads")
+    SixteenCores = ("crc P", "sixteenCoresScore", "3DMark CPU Profile 16 threads")
+    AllCores = ("crc P", "allCoresScore", "3DMark CPU Profile Max threads")
+
+
+class GPU_TESTSCENE(Enum):
+    TimeSpy = ("spy P", "graphicsScore", "3DMark Time Spy")
+    TimeSpyExtreme = ("spy X", "graphicsScore", "3DMark Time Spy Extreme")
+    PortRoyal = ("pr P", "graphicsScore", "3DMark Port Royal")
+    SpeedWay = ("sw P", "graphicsScore", "3DMark Speed Way")
+    SteelNomadDX12 = ("sw DX", "graphicsScore", "3DMark Steel Nomad DX12")
+    SteelNomadVulkan = ("sw B", "graphicsScore", "3DMark Steel Nomad Vulkan")
+    SteelNomadLightDX12 = ("sw DXLT", "graphicsScore", "3DMark Steel Nomad Light DX12")
+    SteelNomadLightVulkan = (
+        "sw VKLT",
+        "graphicsScore",
+        "3DMark Steel Nomad Light Vulkan",
+    )
+    SolarBay = ("sb P", "graphicsScore", "3DMark Solar Bay")
+    FireStrike = ("fs P", "graphicsScore", "3DMark Fire Strike")
+    FireStrikeExtreme = ("fs X", "graphicsScore", "3DMark Fire Strike Extreme")
+    FireStrikeUltra = ("fs R", "graphicsScore", "3DMark Fire Strike Ultra")
+    WildLife = ("wl P", "graphicsScore", "3DMark Fire Wild Life")
+    WildLifeExtreme = ("wl X", "graphicsScore", "3DMark Fire Wild Life Extreme")
+    NightRaid = ("nr P", "graphicsScore", "3DMark Night Raid")
+
+
+TESTSCENE_TYPE = Literal[
+    CPU_TESTSCENE.SingleCore,
+    CPU_TESTSCENE.TwoCores,
+    CPU_TESTSCENE.FourCores,
+    CPU_TESTSCENE.EightCores,
+    CPU_TESTSCENE.SixteenCores,
+    CPU_TESTSCENE.AllCores,
+    GPU_TESTSCENE.TimeSpy,
+    GPU_TESTSCENE.TimeSpyExtreme,
+    GPU_TESTSCENE.PortRoyal,
+    GPU_TESTSCENE.SpeedWay,
+    GPU_TESTSCENE.SteelNomadDX12,
+    GPU_TESTSCENE.SteelNomadVulkan,
+    GPU_TESTSCENE.SteelNomadLightDX12,
+    GPU_TESTSCENE.SteelNomadLightVulkan,
+    GPU_TESTSCENE.SolarBay,
+    GPU_TESTSCENE.FireStrike,
+    GPU_TESTSCENE.FireStrikeExtreme,
+    GPU_TESTSCENE.FireStrikeUltra,
+    GPU_TESTSCENE.WildLife,
+    GPU_TESTSCENE.WildLifeExtreme,
+    GPU_TESTSCENE.NightRaid,
+]
 
 
 def ErrorCallback(CallState: RetryCallState) -> None:
@@ -29,18 +78,14 @@ def Get(Url: str) -> Response:
 
 
 def Get3DMarkUrlParameters(
-    TestScene: Literal[
-        TESTSCENE.CPU_SINGLECORE,
-        TESTSCENE.CPU_ALLCORES,
-        TESTSCENE.GPU_GRAPHICS,
-        TESTSCENE.GPU_RAYTRACING,
-    ],
+    TestScene: TESTSCENE_TYPE,
     Id: int,
 ) -> str:
+    IsCpu: bool = "CPU" in TestScene.__class__.__name__
     test = TestScene.value[0]
-    cpuId = Id if "CPU" in TestScene.name else ""
-    gpuId = Id if "GPU" in TestScene.name else ""
-    gpuCount = 1 if "GPU" in TestScene.name else 0
+    cpuId = Id if IsCpu else ""
+    gpuId = Id if not IsCpu else ""
+    gpuCount = 1 if not IsCpu else 0
     scoreType = TestScene.value[1]
     UrlParametersList: List[str] = [
         f"test={test}",
@@ -67,12 +112,7 @@ def Get3DMarkUrlParameters(
 
 
 def GetMedianScoreFromId(
-    TestScene: Literal[
-        TESTSCENE.CPU_SINGLECORE,
-        TESTSCENE.CPU_ALLCORES,
-        TESTSCENE.GPU_GRAPHICS,
-        TESTSCENE.GPU_RAYTRACING,
-    ],
+    TestScene: TESTSCENE_TYPE,
     Id: int,
 ) -> Tuple[int, int]:
     UrlParameters: str = Get3DMarkUrlParameters(TestScene, Id)
@@ -89,3 +129,18 @@ def GetNameFromId(Id: int, IsCpu: bool) -> Tuple[int, str]:
     Url: str = f"https://www.3dmark.com/proxycon/ajax/search/{Device}id?id={Id}"
     Response = Get(Url)
     return Id, Response.json()[f"{Device}Name"]
+
+
+def Test():
+    # 4090 TimeSpy
+    UrlParameters: str = Get3DMarkUrlParameters(GPU_TESTSCENE.TimeSpy, 1509)
+    Url: str = f"https://www.3dmark.com/proxycon/ajax/medianscore?{UrlParameters}"
+    Response = Get(Url)
+    try:
+        return int(Response.json()["median"])
+    except:
+        return 0
+
+
+if __name__ == "__main__":
+    print(Test())
