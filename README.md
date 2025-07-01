@@ -4,7 +4,7 @@
 <details>
   <summary>版本要求</summary>
 
-- Python: >= 3.9 (64-bit only)
+- Python >= 3.9
 - 依赖
   - openpyxl
   - pandas
