@@ -47,8 +47,12 @@ python Main.py
 1. 全量更新，从3dmark爬取数据，保存到本地（json格式），然后处理数据导出Excel
 2. 从本地读取json数据，处理数据导出Excel
 
-![image4](Pictures/image4.png)
-![image1](Pictures/image1.png)
-![image2](Pictures/image2.png)
-![image3](Pictures/image3.png)
+<img src="Pictures/image4.png" alt="image4" width="300" />
+
+<img src="Pictures/image1.png" alt="image1" width="500" />
+
+<img src="Pictures/image2.png" alt="image2" />
+
+<img src="Pictures/image3.png" alt="image3" />
+
 
